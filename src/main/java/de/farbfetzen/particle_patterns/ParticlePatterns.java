@@ -9,7 +9,6 @@ public class ParticlePatterns extends PApplet {
 
     private static final int CANVAS_WIDTH = 1024;
     private static final int CANVAS_HEIGHT = 768;
-    private static final int DISTANCE_SQUARED_CUTOFF = 100 * 100;
 
     private final int backgroundColor = color(0, 0, 0);
     private float slipperiness;
@@ -21,6 +20,7 @@ public class ParticlePatterns extends PApplet {
     };
     private final Particle[][] particlesGroups = new Particle[4][];
     private final float[][] gMatrix = new float[4][4];
+    private float cutoffDistanceSquared;
     private final Random seedGenerator = new Random();
     private long seed;
 
@@ -64,9 +64,11 @@ public class ParticlePatterns extends PApplet {
         System.out.println("Seed: " + seed);
         randomSeed(seed);
         slipperiness = random(0.05f, 0.95f);  // high value equals low friction and vice versa
-
+        final var cutoffDistance = constrain(randomGaussian() * 30 + 150, 50, 250);
+        System.out.println("Cutoff distance: " + cutoffDistance);
+        cutoffDistanceSquared = cutoffDistance * cutoffDistance;
         for (int i = 0; i < particlesGroups.length; i++) {
-            final int n = (int) random(100, 1000);
+            final int n = (int) random(100, 500);
             final var particles = new Particle[n];
             for (int j = 0; j < n; j++) {
                 final var position = new PVector(random(0, CANVAS_WIDTH), random(0, CANVAS_HEIGHT));
@@ -109,12 +111,12 @@ public class ParticlePatterns extends PApplet {
         }
     }
 
-    private static void updateVelocity(final Particle[] groupA, final Particle[] groupB, final float g) {
+    private void updateVelocity(final Particle[] groupA, final Particle[] groupB, final float g) {
         for (final Particle a : groupA) {
             for (final Particle b : groupB) {
                 final PVector distanceXY = PVector.sub(a.getPosition(), b.getPosition());
                 final float distanceSquared = distanceXY.magSq();
-                if (distanceSquared > 0 && distanceSquared < DISTANCE_SQUARED_CUTOFF) {
+                if (distanceSquared > 0 && distanceSquared < cutoffDistanceSquared) {
                     final float distance = sqrt(distanceSquared);
                     final float force = g / distance;
                     a.getVelocity().add(distanceXY.mult(force));
