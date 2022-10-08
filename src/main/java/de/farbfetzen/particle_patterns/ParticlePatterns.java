@@ -153,6 +153,12 @@ public class ParticlePatterns extends PApplet {
         } else if (key == 'n') {
             seed = seedGenerator.nextLong();
             reset();
+        } else if (key == ' ') {
+            if (isLooping()) {
+                noLoop();
+            } else {
+                loop();
+            }
         }
     }
 
