@@ -14,10 +14,10 @@ public class ParticlePatterns extends PApplet {
     private final int backgroundColor = color(0, 0, 0);
     private float slipperiness;
     private final int[] colors = {
-            color(255, 0, 0, 128f),
-            color(0, 255, 255, 128f),
-            color(0, 255, 0, 128f),
-            color(255, 255, 0, 128f)
+            color(255, 1, 1, 128f),
+            color(1, 255, 255, 128f),
+            color(1, 255, 1, 128f),
+            color(255, 255, 1, 128f)
     };
     private final Particle[][] particlesGroups = new Particle[4][];
     private final float[][] gMatrix = new float[4][4];
@@ -55,6 +55,7 @@ public class ParticlePatterns extends PApplet {
     public void setup() {
         handleArgs();
         strokeWeight(5);
+        blendMode(ADD);
         reset();
     }
 
