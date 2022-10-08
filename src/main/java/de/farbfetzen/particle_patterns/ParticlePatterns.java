@@ -9,8 +9,6 @@ public class ParticlePatterns extends PApplet {
     private static final int CANVAS_WIDTH = 1024;
     private static final int CANVAS_HEIGHT = 768;
     private static final int DISTANCE_SQUARED_CUTOFF = 100 * 100;
-    private static final Random seedGenerator = new Random();
-    private static Long seed;
 
     private final int backgroundColor = color(0, 0, 0);
     private float slipperiness;
@@ -22,20 +20,29 @@ public class ParticlePatterns extends PApplet {
     };
     private final Particle[][] particlesGroups = new Particle[4][];
     private final float[][] gMatrix = new float[4][4];
+    private final Random seedGenerator = new Random();
+    private long seed;
 
     public static void main(final String[] args) {
-        int i = 0;
-        while (i < args.length) {
-            if ("-s".equals(args[i])) {
-                seed = Long.parseLong(args[++i]);
-            }
-            i++;
-        }
-        PApplet.main(ParticlePatterns.class);
+        PApplet.main(ParticlePatterns.class, args);
     }
 
-    private static void nextSeed() {
-        seed = seedGenerator.nextLong();
+    private void handleArgs() {
+        boolean customSeed = false;
+        if (args != null) {
+            int i = 0;
+            while (i < args.length) {
+                if ("-s".equals(args[i])) {
+                    seed = Long.parseLong(args[++i]);
+                    seedGenerator.setSeed(seed);
+                    customSeed = true;
+                }
+                i++;
+            }
+        }
+        if (args == null || !customSeed) {
+            seed = seedGenerator.nextLong();
+        }
     }
 
     @Override
@@ -45,21 +52,19 @@ public class ParticlePatterns extends PApplet {
 
     @Override
     public void setup() {
+        handleArgs();
         strokeWeight(5);
-        reset(seed == null);
+        reset();
     }
 
-    private void reset(final boolean newSeed) {
+    private void reset() {
         // TODO: Print all interesting values to the console.
-        if (newSeed) {
-            nextSeed();
-        }
         System.out.println("Seed: " + seed);
         randomSeed(seed);
         slipperiness = random(0.05f, 0.95f);  // high value equals low friction and vice versa
 
         for (int i = 0; i < particlesGroups.length; i++) {
-            final int n = (int) random(50, 500);
+            final int n = (int) random(100, 1000);
             final var particles = new Particle[n];
             for (int j = 0; j < n; j++) {
                 particles[j] = new Particle(random(0, CANVAS_WIDTH), random(0, CANVAS_HEIGHT));
@@ -98,7 +103,6 @@ public class ParticlePatterns extends PApplet {
     }
 
     private static void updateVelocity(final Particle[] groupA, final Particle[] groupB, final float g) {
-        // TODO: Take delta time into account?
         for (final Particle a : groupA) {
             for (final Particle b : groupB) {
                 final float dx = a.getPositionX() - b.getPositionX();
@@ -117,9 +121,10 @@ public class ParticlePatterns extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 'r') {
-            reset(false);
+            reset();
         } else if (key == 'n') {
-            reset(true);
+            seed = seedGenerator.nextLong();
+            reset();
         }
     }
 
