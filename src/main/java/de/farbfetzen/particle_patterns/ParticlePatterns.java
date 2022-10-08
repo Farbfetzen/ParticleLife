@@ -3,6 +3,7 @@ package de.farbfetzen.particle_patterns;
 import java.util.Random;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class ParticlePatterns extends PApplet {
 
@@ -97,7 +98,7 @@ public class ParticlePatterns extends PApplet {
         for (int i = 0; i < 4; i++) {
             stroke(colors[i]);
             for (final Particle particle : particlesGroups[i]) {
-                point(particle.getPositionX(), particle.getPositionY());
+                point(particle.getPosition().x, particle.getPosition().y);
             }
         }
     }
@@ -105,14 +106,12 @@ public class ParticlePatterns extends PApplet {
     private static void updateVelocity(final Particle[] groupA, final Particle[] groupB, final float g) {
         for (final Particle a : groupA) {
             for (final Particle b : groupB) {
-                final float dx = a.getPositionX() - b.getPositionX();
-                final float dy = a.getPositionY() - b.getPositionY();
-                final float distanceSquared = dx * dx + dy * dy;
+                final PVector distanceXY = PVector.sub(a.getPosition(), b.getPosition());
+                final float distanceSquared = distanceXY.magSq();
                 if (distanceSquared > 0 && distanceSquared < DISTANCE_SQUARED_CUTOFF) {
                     final float distance = sqrt(distanceSquared);
                     final float force = g / distance;
-                    a.setVelocityX(a.getVelocityX() + force * dx);
-                    a.setVelocityY(a.getVelocityY() + force * dy);
+                    a.getVelocity().add(distanceXY.mult(force));
                 }
             }
         }

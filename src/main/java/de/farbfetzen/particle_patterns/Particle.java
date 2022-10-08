@@ -2,41 +2,36 @@ package de.farbfetzen.particle_patterns;
 
 import lombok.Getter;
 import lombok.Setter;
+import processing.core.PVector;
 
 @Getter
 @Setter
 class Particle {
 
-    private float positionX;
-    private float positionY;
-    private float velocityX;
-    private float velocityY;
+    private PVector position;
+    private PVector velocity = new PVector();
 
     Particle(final float positionX, final float positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position = new PVector(positionX, positionY);
     }
 
     void update(final int maxX, final int maxY, final float slipperiness) {
-        velocityX *= slipperiness;
-        velocityY *= slipperiness;
+        velocity.mult(slipperiness);
+        position.add(velocity);
 
-        positionX += velocityX;
-        positionY += velocityY;
-
-        if (positionX < 0) {
-            positionX = -positionX;
-            velocityX = -velocityX;
-        } else if (positionX >= maxX) {
-            positionX = maxX * 2 - positionX;
-            velocityX = -velocityX;
+        if (position.x < 0) {
+            position.x = -position.x;
+            velocity.x = -velocity.x;
+        } else if (position.x >= maxX) {
+            position.x = maxX * 2 - position.x;
+            velocity.x = -velocity.x;
         }
-        if (positionY < 0) {
-            positionY = -positionY;
-            velocityY = -velocityY;
-        } else if (positionY >= maxY) {
-            positionY = maxY * 2 - positionY;
-            velocityY = -velocityY;
+        if (position.y < 0) {
+            position.y = -position.y;
+            velocity.y = -velocity.y;
+        } else if (position.y >= maxY) {
+            position.y = maxY * 2 - position.y;
+            velocity.y = -velocity.y;
         }
     }
 }
