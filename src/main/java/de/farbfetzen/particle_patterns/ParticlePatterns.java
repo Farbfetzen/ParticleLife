@@ -1,17 +1,26 @@
 package de.farbfetzen.particle_patterns;
 
+import java.util.List;
 import java.util.Random;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 public class ParticlePatterns extends PApplet {
 
-    private static final int CANVAS_WIDTH = 1024;
-    private static final int CANVAS_HEIGHT = 768;
+    @Parameter(names = {"-s", "--seed"}, description = "The initial seed for the random number generator")
+    private Long seed;
+    @Parameter(names = {"-f", "--full-screen"}, description = "Run the app in full screen mode. Type ESC to exit.")
+    private boolean fullScreenArg;
+    @Parameter(names = {"-w", "--window-size"}, arity = 2, description = "The window width and height in pixels.")
+    private List<Integer> windowSize = List.of(1024, 768);
+    @Parameter(names = {"-h", "--help"}, description = "Display this help message.", help = true)
+    private boolean showHelp;
 
     private final int backgroundColor = color(0, 0, 0);
-    private float slipperiness;
     private final int[] colors = {
             color(255, 1, 1, 128f),
             color(1, 255, 255, 128f),
@@ -20,47 +29,52 @@ public class ParticlePatterns extends PApplet {
     };
     private final Particle[][] particlesGroups = new Particle[4][];
     private final float[][] gMatrix = new float[4][4];
+    private float slipperiness;
     private float cutoffDistanceSquared;
     private final Random seedGenerator = new Random();
-    private long seed;
 
     public static void main(final String[] args) {
         PApplet.main(ParticlePatterns.class, args);
     }
 
-    private void handleArgs() {
-        boolean customSeed = false;
-        if (args != null) {
-            int i = 0;
-            while (i < args.length) {
-                if ("-s".equals(args[i])) {
-                    seed = Long.parseLong(args[++i]);
-                    seedGenerator.setSeed(seed);
-                    customSeed = true;
-                }
-                i++;
-            }
-        }
-        if (args == null || !customSeed) {
-            seed = seedGenerator.nextLong();
-        }
-    }
-
     @Override
     public void settings() {
-        size(CANVAS_WIDTH, CANVAS_HEIGHT);
+        if (args == null) {
+            args = new String[0];
+        }
+        final var jc = JCommander.newBuilder().programName("ParticlePatterns").addObject(this).build();
+        try {
+            jc.parse(args);
+        } catch (final ParameterException e) {
+            System.out.println(e.getMessage());
+            jc.usage();
+            System.exit(1);
+        }
+        if (showHelp) {
+            jc.usage();
+            System.exit(0);
+        }
+        if (seed == null) {
+            seed = seedGenerator.nextLong();
+        } else {
+            seedGenerator.setSeed(seed);
+        }
+        if (fullScreenArg) {
+            fullScreen();
+        } else {
+            width = windowSize.get(0);
+            height = windowSize.get(1);
+        }
     }
 
     @Override
     public void setup() {
-        handleArgs();
         strokeWeight(5);
         blendMode(ADD);
         reset();
     }
 
     private void reset() {
-        // TODO: Print all interesting values to the console.
         System.out.println("Seed: " + seed);
         randomSeed(seed);
         slipperiness = random(0.05f, 0.95f);  // high value equals low friction and vice versa
@@ -71,7 +85,7 @@ public class ParticlePatterns extends PApplet {
             final int n = (int) random(100, 500);
             final var particles = new Particle[n];
             for (int j = 0; j < n; j++) {
-                final var position = new PVector(random(0, CANVAS_WIDTH), random(0, CANVAS_HEIGHT));
+                final var position = new PVector(random(0, width), random(0, height));
                 particles[j] = new Particle(position);
             }
             particlesGroups[i] = particles;
@@ -106,7 +120,7 @@ public class ParticlePatterns extends PApplet {
         }
         for (final Particle[] particles : particlesGroups) {
             for (final Particle particle : particles) {
-                particle.update(CANVAS_WIDTH, CANVAS_HEIGHT, slipperiness);
+                particle.update(width, height, slipperiness);
             }
         }
     }
