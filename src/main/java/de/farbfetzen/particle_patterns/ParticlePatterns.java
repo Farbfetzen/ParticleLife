@@ -69,7 +69,8 @@ public class ParticlePatterns extends PApplet {
             final int n = (int) random(100, 1000);
             final var particles = new Particle[n];
             for (int j = 0; j < n; j++) {
-                particles[j] = new Particle(random(0, CANVAS_WIDTH), random(0, CANVAS_HEIGHT));
+                final var position = new PVector(random(0, CANVAS_WIDTH), random(0, CANVAS_HEIGHT));
+                particles[j] = new Particle(position);
             }
             particlesGroups[i] = particles;
         }
@@ -83,6 +84,17 @@ public class ParticlePatterns extends PApplet {
 
     @Override
     public void draw() {
+        updateParticles();
+        background(backgroundColor);
+        for (int i = 0; i < 4; i++) {
+            stroke(colors[i]);
+            for (final Particle particle : particlesGroups[i]) {
+                point(particle.getPosition().x, particle.getPosition().y);
+            }
+        }
+    }
+
+    private void updateParticles() {
         for (int i = 0; i < particlesGroups.length; i++) {
             final var groupA = particlesGroups[i];
             for (int j = 0; j < particlesGroups.length; j++) {
@@ -93,13 +105,6 @@ public class ParticlePatterns extends PApplet {
         for (final Particle[] particles : particlesGroups) {
             for (final Particle particle : particles) {
                 particle.update(CANVAS_WIDTH, CANVAS_HEIGHT, slipperiness);
-            }
-        }
-        background(backgroundColor);
-        for (int i = 0; i < 4; i++) {
-            stroke(colors[i]);
-            for (final Particle particle : particlesGroups[i]) {
-                point(particle.getPosition().x, particle.getPosition().y);
             }
         }
     }

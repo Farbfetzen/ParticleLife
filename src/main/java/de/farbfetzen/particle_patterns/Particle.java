@@ -11,8 +11,8 @@ class Particle {
     private PVector position;
     private PVector velocity = new PVector();
 
-    Particle(final float positionX, final float positionY) {
-        this.position = new PVector(positionX, positionY);
+    Particle(final PVector position) {
+        this.position = position;
     }
 
     void update(final int maxX, final int maxY, final float slipperiness) {
