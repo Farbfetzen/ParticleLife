@@ -32,6 +32,9 @@ public class ParticlePatterns extends PApplet {
     private float slipperiness;
     private float cutoffDistanceSquared;
     private final Random seedGenerator = new Random();
+    private float distanceMean;
+    private float distanceSd;
+    private float distanceMax;
 
     public static void main(final String[] args) {
         PApplet.main(ParticlePatterns.class, args);
@@ -69,6 +72,10 @@ public class ParticlePatterns extends PApplet {
 
     @Override
     public void setup() {
+        final var meanDimensions = (width + height) / 2f;
+        distanceMean = meanDimensions / 6;
+        distanceSd = meanDimensions / 30;
+        distanceMax = distanceMean * 2;
         strokeWeight(5);
         blendMode(ADD);
         reset();
@@ -78,7 +85,7 @@ public class ParticlePatterns extends PApplet {
         System.out.println("Seed: " + seed);
         randomSeed(seed);
         slipperiness = random(0.05f, 0.95f);  // high value equals low friction and vice versa
-        final var cutoffDistance = constrain(randomGaussian() * 30 + 150, 50, 250);
+        final var cutoffDistance = constrain(randomGaussian() * distanceSd + distanceMean, 20, distanceMax);
         System.out.println("Cutoff distance: " + cutoffDistance);
         cutoffDistanceSquared = cutoffDistance * cutoffDistance;
         for (int i = 0; i < particlesGroups.length; i++) {
