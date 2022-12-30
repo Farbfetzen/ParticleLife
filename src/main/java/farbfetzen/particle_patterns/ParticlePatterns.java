@@ -1,4 +1,4 @@
-package de.farbfetzen.particle_patterns;
+package farbfetzen.particle_patterns;
 
 import java.util.List;
 import java.util.Random;
