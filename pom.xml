@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>farbfetzen</groupId>
-    <artifactId>particle-patterns</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>particlelife</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
-        <mainClass>farbfetzen.particle_patterns.ParticlePatterns</mainClass>
+        <mainClass>farbfetzen.particlelife.ParticleLife</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

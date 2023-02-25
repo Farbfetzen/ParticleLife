@@ -1,4 +1,4 @@
-package farbfetzen.particle_patterns;
+package farbfetzen.particlelife;
 
 import java.util.List;
 import java.util.Random;
@@ -9,7 +9,7 @@ import com.beust.jcommander.ParameterException;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class ParticlePatterns extends PApplet {
+public class ParticleLife extends PApplet {
 
     @Parameter(names = {"-s", "--seed"}, description = "The initial seed for the random number generator")
     private Long seed;
@@ -37,7 +37,7 @@ public class ParticlePatterns extends PApplet {
     private float distanceMax;
 
     public static void main(final String[] args) {
-        PApplet.main(ParticlePatterns.class, args);
+        PApplet.main(ParticleLife.class, args);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ParticlePatterns extends PApplet {
         if (args == null) {
             args = new String[0];
         }
-        final var jc = JCommander.newBuilder().programName("ParticlePatterns").addObject(this).build();
+        final var jc = JCommander.newBuilder().programName("ParticleLife").addObject(this).build();
         try {
             jc.parse(args);
         } catch (final ParameterException e) {

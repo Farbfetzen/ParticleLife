@@ -1,4 +1,4 @@
-package farbfetzen.particle_patterns;
+package farbfetzen.particlelife;
 
 import lombok.Getter;
 import lombok.Setter;
