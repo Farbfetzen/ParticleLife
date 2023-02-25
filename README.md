@@ -55,7 +55,8 @@ Make sure to replace the placeholders for the path and the version.
 
 ## Inspiration
 
+- [Video "Artificial Particle Life - Simulation & Code" by Brainxyz](https://www.youtube.com/watch?v=0Kx4Y9TVMGg)
+- [Video "How Particle Life emerges from simplicity" by Tom Mohr](https://www.youtube.com/watch?v=p4YirERTVF0)
 - <https://www.redblobgames.com/x/2234-hunar-alife-simulation>
 - <https://github.com/redblobgames/2234-hunar-alife-simulation>
-- <https://www.youtube.com/watch?v=0Kx4Y9TVMGg>
 - <https://github.com/hunar4321/particle-life>
