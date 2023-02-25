@@ -8,10 +8,12 @@ import processing.core.PVector;
 @Setter
 class Particle {
 
+    private final int groupId;
     private PVector position;
     private PVector velocity = new PVector();
 
-    Particle(final PVector position) {
+    Particle(final int groupId, final PVector position) {
+        this.groupId = groupId;
         this.position = position;
     }
 
