@@ -7,6 +7,24 @@
     <groupId>farbfetzen</groupId>
     <artifactId>particlelife</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>ParticleLife</name>
+    <description>A particle simulation that shows surprisingly complex behaviors.</description>
+    <developers>
+        <developer>
+            <name>Sebastian Henz</name>
+            <email>farbfetzen@posteo.de</email>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Farbfetzen/ParticleLife/issues</url>
+    </issueManagement>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
