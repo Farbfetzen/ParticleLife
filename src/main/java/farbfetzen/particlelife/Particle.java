@@ -17,9 +17,9 @@ class Particle {
         this.position = position;
     }
 
-    void update(final int maxX, final int maxY, final float slipperiness) {
+    void update(final float deltaTime, final int maxX, final int maxY, final float slipperiness) {
         velocity.mult(slipperiness);
-        position.add(velocity);
+        position.add(PVector.mult(velocity, deltaTime));
 
         if (position.x < 0) {
             position.x = -position.x;
