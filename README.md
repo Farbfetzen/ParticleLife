@@ -37,7 +37,7 @@ The following arguments are currently available:
 ## How to get Processing as a Maven dependency
 
 This project relies on [Processing](https://processing.org) for the visualisation and interactivity.
-It is currently not available on maven central.
+It is currently not available on Maven Central.
 However, there is still a way you can use it with Maven.
 Download Processing from processing.org, unpack it, then install it into your local Maven repository using this command:
 
