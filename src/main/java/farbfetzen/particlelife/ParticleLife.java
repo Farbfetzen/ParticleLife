@@ -165,12 +165,10 @@ public class ParticleLife extends PApplet {
 
     // TODO: Check this method with a unit test.
     private PVector getClosestDistance(final Particle pA, final Particle pB) {
-        final float closestX;
-        final float closestY;
-        final float xDistanceOnScreen = pB.getPosition().x - pA.getPosition().x;
-        final float yDistanceOnScreen = pB.getPosition().y - pA.getPosition().y;
         // Depending on the sign of the differences I can reduce the number of comparisons.
         // I also can check x and y independently.
+        final float closestX;
+        final float xDistanceOnScreen = pB.getPosition().x - pA.getPosition().x;
         if (abs(xDistanceOnScreen) <= halfWidth) {
             closestX = xDistanceOnScreen;
         } else if (xDistanceOnScreen >= 0) {
@@ -180,6 +178,8 @@ public class ParticleLife extends PApplet {
             // right
             closestX = xDistanceOnScreen + width;
         }
+        final float closestY;
+        final float yDistanceOnScreen = pB.getPosition().y - pA.getPosition().y;
         if (abs(yDistanceOnScreen) < halfHeight) {
             closestY = yDistanceOnScreen;
         } else if (yDistanceOnScreen >= 0) {
