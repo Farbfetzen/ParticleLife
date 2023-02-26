@@ -161,21 +161,16 @@ public class ParticleLife extends PApplet {
 
     private float[] getForces(final float distance, final int groupA, final int groupB) {
         // Positive force = repulsion, negative force = attraction.
-        final float[] forces = new float[2];
         if (distance <= DISTANCE_MIN) {
             final float f = G_AT_0 + SLOPE_0_TO_MIN * distance;
-            forces[0] = f;
-            forces[1] = f;
-        } else if (distance <= distanceMid) {
-            final float d = distance - DISTANCE_MIN;
-            forces[0] = d * slopeMinToMid[groupA][groupB];
-            forces[1] = d * slopeMinToMid[groupB][groupA];
-        } else {
-            final float d = distance - distanceMax;
-            forces[0] = d * slopeMidToMax[groupA][groupB];
-            forces[1] = d * slopeMidToMax[groupB][groupA];
+            return new float[]{f, f};
         }
-        return forces;
+        if (distance <= distanceMid) {
+            final float d = distance - DISTANCE_MIN;
+            return new float[]{d * slopeMinToMid[groupA][groupB], d * slopeMinToMid[groupB][groupA]};
+        }
+        final float d = distance - distanceMax;
+        return new float[]{d * slopeMidToMax[groupA][groupB], d * slopeMidToMax[groupB][groupA]};
     }
 
     @Override
