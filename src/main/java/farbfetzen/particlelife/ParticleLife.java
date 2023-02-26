@@ -214,11 +214,8 @@ public class ParticleLife extends PApplet {
             seed = seedGenerator.nextLong();
             reset();
         } else if (key == ' ') {
-            if (isLooping()) {
-                noLoop();
-            } else {
-                loop();
-            }
+            looping = !looping;
+            previousMillis = millis();
         }
     }
 
