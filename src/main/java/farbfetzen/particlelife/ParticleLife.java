@@ -118,7 +118,8 @@ public class ParticleLife extends PApplet {
             final int numberOfParticlesInGroup = (int) random(100, 500);
             for (int j = 0; j < numberOfParticlesInGroup; j++) {
                 final var position = new PVector(random(0, width), random(0, height));
-                particles.add(new Particle(i, position));
+                final var velocity = PVector.random2D(this).mult(100);
+                particles.add(new Particle(i, position, velocity));
             }
         }
     }

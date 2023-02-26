@@ -10,11 +10,12 @@ class Particle {
 
     private final int groupId;
     private PVector position;
-    private PVector velocity = new PVector();
+    private PVector velocity;
 
-    Particle(final int groupId, final PVector position) {
+    Particle(final int groupId, final PVector position, final PVector velocity) {
         this.groupId = groupId;
         this.position = position;
+        this.velocity = velocity;
     }
 
     void update(final float deltaTime, final int maxX, final int maxY, final float slipperiness) {
