@@ -23,18 +23,15 @@ class Particle {
         position.add(PVector.mult(velocity, deltaTime));
 
         if (position.x < 0) {
-            position.x = -position.x;
-            velocity.x = -velocity.x;
+            position.x = maxX - position.x;
         } else if (position.x >= maxX) {
-            position.x = maxX * 2 - position.x;
-            velocity.x = -velocity.x;
+            position.x = position.x - maxX;
         }
         if (position.y < 0) {
-            position.y = -position.y;
-            velocity.y = -velocity.y;
+            position.y = maxY - position.y;
         } else if (position.y >= maxY) {
-            position.y = maxY * 2 - position.y;
-            velocity.y = -velocity.y;
+            position.y = position.y - maxY;
         }
     }
+
 }

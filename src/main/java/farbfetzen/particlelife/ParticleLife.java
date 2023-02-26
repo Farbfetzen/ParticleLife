@@ -47,6 +47,8 @@ public class ParticleLife extends PApplet {
     private final float[][] slopeMinToMid = new float[NUMBER_OF_GROUPS][NUMBER_OF_GROUPS];
     private final float[][] slopeMidToMax = new float[NUMBER_OF_GROUPS][NUMBER_OF_GROUPS];
     private int previousMillis = 0;
+    private float halfWidth;
+    private float halfHeight;
 
     public static void main(final String[] args) {
         PApplet.main(ParticleLife.class, args);
@@ -88,6 +90,8 @@ public class ParticleLife extends PApplet {
         distanceDistributionMean = meanDimensions / 6;
         distanceDistributionSd = meanDimensions / 30;
         distanceDistributionMax = distanceDistributionMean * 2;
+        halfWidth = width / 2f;
+        halfHeight = height / 2f;
         strokeWeight(POINT_SIZE);
         blendMode(ADD);
         reset();
@@ -144,7 +148,7 @@ public class ParticleLife extends PApplet {
             for (int j = i + 1; j < particles.size(); j++) {
                 final Particle pA = particles.get(i);
                 final Particle pB = particles.get(j);
-                final PVector distanceXY = PVector.sub(pA.getPosition(), pB.getPosition());
+                final PVector distanceXY = getClosestDistance(pA, pB);
                 final float distanceSquared = distanceXY.magSq();
                 if (distanceSquared < cutoffDistanceSquared) {
                     final float distance = distanceSquared > 0 ? sqrt(distanceSquared) : Float.MIN_VALUE;
@@ -157,6 +161,35 @@ public class ParticleLife extends PApplet {
         for (final Particle particle : particles) {
             particle.update(deltaTime, width, height, slipperiness);
         }
+    }
+
+    // TODO: Check this method with a unit test.
+    private PVector getClosestDistance(final Particle pA, final Particle pB) {
+        final float closestX;
+        final float closestY;
+        final float xDistanceOnScreen = pB.getPosition().x - pA.getPosition().x;
+        final float yDistanceOnScreen = pB.getPosition().y - pA.getPosition().y;
+        // Depending on the sign of the differences I can reduce the number of comparisons.
+        // I also can check x and y independently.
+        if (abs(xDistanceOnScreen) <= halfWidth) {
+            closestX = xDistanceOnScreen;
+        } else if (xDistanceOnScreen >= 0) {
+            // left
+            closestX = xDistanceOnScreen - width;
+        } else {
+            // right
+            closestX = xDistanceOnScreen + width;
+        }
+        if (abs(yDistanceOnScreen) < halfHeight) {
+            closestY = yDistanceOnScreen;
+        } else if (yDistanceOnScreen >= 0) {
+            // top
+            closestY = yDistanceOnScreen - height;
+        } else {
+            // bottom
+            closestY = yDistanceOnScreen + height;
+        }
+        return new PVector(closestX, closestY);
     }
 
     private float[] getForces(final float distance, final int groupA, final int groupB) {
