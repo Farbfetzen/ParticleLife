@@ -96,7 +96,8 @@ public class ParticleLife extends PApplet {
     private void reset() {
         System.out.println("Seed: " + seed);
         randomSeed(seed);
-        slipperiness = random(0.05f, 0.95f);  // high value equals low friction and vice versa
+        // high slipperiness equals low friction and vice versa
+        slipperiness = constrain(randomGaussian() * 0.15f + 0.5f, 0.1f, 0.9f);
         distanceMax = constrain(
                 randomGaussian() * distanceDistributionSd + distanceDistributionMean,
                 20,
