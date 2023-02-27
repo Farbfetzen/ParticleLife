@@ -14,9 +14,12 @@ public class ParticleLife extends PApplet {
 
     private static final int NUMBER_OF_GROUPS = 4;
     private static final int POINT_SIZE = 5;
-    private static final int DISTANCE_MIN = POINT_SIZE * 5;
-    // A positive g results in a repulsive force.
-    private static final float G_AT_0 = 1;
+    private static final int DISTANCE_MIN = POINT_SIZE * 2;
+    // positive g -> positive force -> attraction
+    // negative g -> negative force -> repulsion
+    private static final float G_MIN = -1;
+    private static final float G_MAX = 1;
+    private static final float G_AT_0 = -max(abs(G_MAX), abs(G_MIN));
     private static final float SLOPE_0_TO_MIN = -G_AT_0 / DISTANCE_MIN;
 
     @Parameter(names = {"-s", "--seed"}, description = "The initial seed for the random number generator")
@@ -37,7 +40,7 @@ public class ParticleLife extends PApplet {
     };
     private final List<Particle> particles = new ArrayList<>();
     private float slipperiness;
-    private float cutoffDistanceSquared;
+    private float distanceMaxSquared;
     private final Random seedGenerator = new Random();
     private float distanceDistributionMean;
     private float distanceDistributionSd;
@@ -63,7 +66,7 @@ public class ParticleLife extends PApplet {
         try {
             jc.parse(args);
         } catch (final ParameterException e) {
-            System.out.println(e.getMessage());
+            println(e.getMessage());
             jc.usage();
             System.exit(1);
         }
@@ -98,7 +101,7 @@ public class ParticleLife extends PApplet {
     }
 
     private void reset() {
-        System.out.println("Seed: " + seed);
+        println("Seed: " + seed);
         randomSeed(seed);
         // high slipperiness equals low friction and vice versa
         slipperiness = constrain(randomGaussian() * 0.15f + 0.5f, 0.1f, 0.9f);
@@ -107,12 +110,12 @@ public class ParticleLife extends PApplet {
                 20,
                 distanceDistributionMax
         );
-        cutoffDistanceSquared = distanceMax * distanceMax;
+        distanceMaxSquared = distanceMax * distanceMax;
         final float halfDistance = (distanceMax - DISTANCE_MIN) / 2;
         distanceMid = DISTANCE_MIN + halfDistance;
         for (int i = 0; i < NUMBER_OF_GROUPS; i++) {
             for (int j = 0; j < NUMBER_OF_GROUPS; j++) {
-                final float g = random(-1, 1);
+                final float g = random(G_MIN, G_MAX);
                 slopeMinToMid[i][j] = g / halfDistance;
                 slopeMidToMax[i][j] = -g / halfDistance;
             }
@@ -150,11 +153,12 @@ public class ParticleLife extends PApplet {
                 final Particle pB = particles.get(j);
                 final PVector distanceXY = getClosestDistance(pA, pB);
                 final float distanceSquared = distanceXY.magSq();
-                if (distanceSquared < cutoffDistanceSquared) {
+                if (distanceSquared < distanceMaxSquared) {
                     final float distance = distanceSquared > 0 ? sqrt(distanceSquared) : Float.MIN_VALUE;
                     final float[] forces = getForces(distance, pA.getGroupId(), pB.getGroupId());
-                    pA.getVelocity().add(distanceXY.mult(forces[0]));
-                    pB.getVelocity().add(distanceXY.mult(forces[1]));
+                    pA.getVelocity().add(PVector.mult(distanceXY, forces[0]));
+                    // Subtract to apply the force in the opposite direction because distanceXY points from A to B.
+                    pB.getVelocity().sub(PVector.mult(distanceXY, forces[1]));
                 }
             }
         }
@@ -193,7 +197,7 @@ public class ParticleLife extends PApplet {
     }
 
     private float[] getForces(final float distance, final int groupA, final int groupB) {
-        // Positive force = repulsion, negative force = attraction.
+        // Positive force = attraction, negative force = repulsion.
         if (distance <= DISTANCE_MIN) {
             final float f = G_AT_0 + SLOPE_0_TO_MIN * distance;
             return new float[]{f, f};
