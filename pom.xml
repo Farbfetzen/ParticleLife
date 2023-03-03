@@ -26,10 +26,15 @@
         </license>
     </licenses>
 
+    <parent>
+        <!-- https://github.com/Farbfetzen/farbfetzen-parent -->
+        <groupId>farbfetzen</groupId>
+        <artifactId>parent</artifactId>
+        <version>1</version>
+    </parent>
+
     <properties>
-        <maven.compiler.release>17</maven.compiler.release>
         <mainClass>farbfetzen.particlelife.ParticleLife</mainClass>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -46,8 +51,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -56,7 +59,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.5.0</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
@@ -77,63 +79,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.2.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>enforce</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <banDuplicatePomDependencyVersions/>
-                                <requireJavaVersion>
-                                    <version>${maven.compiler.release}</version>
-                                </requireJavaVersion>
-                                <requireMavenVersion>
-                                    <version>3.9.0</version>
-                                </requireMavenVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <mainClass>${mainClass}</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>
