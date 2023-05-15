@@ -4,7 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>farbfetzen</groupId>
+    <parent>
+        <!-- https://github.com/Farbfetzen/farbfetzen-parent -->
+        <groupId>farbfetzen</groupId>
+        <artifactId>parent</artifactId>
+        <version>2</version>
+    </parent>
+
     <artifactId>particlelife</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <name>ParticleLife</name>
@@ -26,13 +32,6 @@
         </license>
     </licenses>
 
-    <parent>
-        <!-- https://github.com/Farbfetzen/farbfetzen-parent -->
-        <groupId>farbfetzen</groupId>
-        <artifactId>parent</artifactId>
-        <version>1</version>
-    </parent>
-
     <properties>
         <mainClass>farbfetzen.particlelife.ParticleLife</mainClass>
     </properties>
@@ -41,16 +40,15 @@
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.82</version>
         </dependency>
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>4.2</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
